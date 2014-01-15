@@ -11,6 +11,7 @@ class MyModel(EndpointsModel):
 
 class Exercise(EndpointsModel):
     """ Represents the exercise per-se workout-independent """
+    
     _message_fields_schema = (
         'id', 'name', 'body_part', 'equipament', 'execution','created',
         'owner',)
@@ -34,11 +35,21 @@ class ExerciseDay(EndpointsModel):
             comment -- comment specific to the exercise on a workout
     """
 
+    _message_fields_schema = (
+        'id','exercise','reps','comment','created','owner',)
+
     exercise_key = ndb.KeyProperty(kind=Exercise,indexed=True)
     reps = ndb.IntegerProperty(indexed=False, repeated=True)
     comment = ndb.StringProperty(indexed=False)
     created = ndb.DateTimeProperty(auto_now_add=True)
     owner = ndb.UserProperty()
+
+    @EndpointsAliasProperty(repeated=False, 
+                            property_type=Exercise.ProtoModel())
+    def exercise(self):
+        if self.exercise_key:
+            return self.exercise_key.get()        
+
 
 
 class ExercisesLink(EndpointsModel):
@@ -62,11 +73,19 @@ class ExercisesLink(EndpointsModel):
 class Day(EndpointsModel):
     """ Conjunction of ExercisesLinks that forms a Day of training. """
 
+    _message_fields_schema = (
+        'id','name','description','proper_time',)
+
     name = ndb.StringProperty(indexed=True)
     description = ndb.StringProperty(indexed=False)
     proper_time = ndb.IntegerProperty(indexed=False)
-
     exercises_links_keys = ndb.KeyProperty(kind=Exercise, repeated=True)
+
+    @EndpointsAliasProperty(repeated=True, 
+                            property_type=ExercisesLink.ProtoModel())
+    def exercises_links(self):
+        return ndb.get_multi(self.exercises_links_keys)
+
 
 
 class Workout(EndpointsModel):

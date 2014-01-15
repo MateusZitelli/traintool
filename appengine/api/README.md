@@ -14,20 +14,37 @@ V1 Endpoints
 Here it will be describe the **minimum** for using the API.
 Latter we'll spend some more time on a wiki to describe it better.
 
-Exercises
+Exercise
 ---
+```
 GET     /exercises
-    * returns a list of the exercises *
+    returns a list of the exercises 
 
 GET     /exercise
-    * params: **id** *
-    * returns the exercise *
+
+    params: id
+    returns the exercise
 
 POST    /exercise
-    * Updates or Create an Exercise at the Db *
+
+    Updates or Create an Exercise at the Db
 
 DELETE  /exercise
-    * Deletes an exercise with the matching ID *
+
+    Deletes an exercise with the matching ID
+
+```
+
+Day
+---
+```
+GET     /days
+    list of the days
+
+DELETE  /day
+    param: id
+    delete a day
+```
 
 General Considerations
 ---
